@@ -61,11 +61,11 @@ export function StartScreen({
         <div className="flex items-center gap-3">
           <Logo />
           <div>
-            <h1 className="text-2xl md:text-[1.75rem] font-black text-foreground tracking-tight leading-none">
-              Word<span className="text-primary">Search</span>
+            <h1 className="text-xl md:text-2xl font-black text-foreground tracking-tight leading-none">
+              <span className="text-primary">Daily</span> Word Search
             </h1>
             <p className="text-[10px] md:text-[11px] text-muted-foreground font-black uppercase tracking-[0.2em] mt-1">
-              Daily Puzzle Game
+              A New Puzzle Every Day
             </p>
           </div>
         </div>

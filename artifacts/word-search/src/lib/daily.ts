@@ -74,5 +74,6 @@ export function formatTime(seconds: number): string {
 export function buildShareText(result: DailyResult): string {
   const time = formatTime(result.timeElapsed);
   const hints = result.hintsUsed === 0 ? "no hints" : `${result.hintsUsed} hint${result.hintsUsed === 1 ? "" : "s"}`;
-  return `Word Search Daily #${result.dayNumber} — ${result.theme}\n⏱ ${time} • 💡 ${hints}\nPlay free: ${typeof window !== "undefined" ? window.location.origin : ""}`;
+  const url = typeof window !== "undefined" ? window.location.origin : "https://dailywordsearch.fun";
+  return `Daily Word Search #${result.dayNumber} — ${result.theme}\n⏱ ${time} • 💡 ${hints}\nPlay free: ${url}`;
 }
