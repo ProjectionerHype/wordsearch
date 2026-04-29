@@ -36,8 +36,10 @@ function computePillGeometry(start: Point, end: Point, size: number): React.CSSP
     top: `${midY}%`,
     width: `${length}%`,
     height: `${thickness}%`,
-    transform: `translate(-50%, -50%) rotate(${angle}deg)`,
-    transformOrigin: "center",
+    marginLeft: `${-length / 2}%`,
+    marginTop: `${-thickness / 2}%`,
+    transform: `rotate(${angle}deg)`,
+    transformOrigin: "center center",
   };
 }
 
