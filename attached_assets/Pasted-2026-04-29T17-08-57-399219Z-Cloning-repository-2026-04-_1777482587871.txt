@@ -1,0 +1,100 @@
+2026-04-29T17:08:57.399219Z	Cloning repository...
+2026-04-29T17:08:58.309145Z	From https://github.com/ProjectionerHype/wordsearch
+2026-04-29T17:08:58.310125Z	 * branch            ef3cb55edbdec9d2f993d1ab7e688bd0e7c663ea -> FETCH_HEAD
+2026-04-29T17:08:58.310218Z	
+2026-04-29T17:08:58.364284Z	HEAD is now at ef3cb55 Prepare the website for deployment to Cloudflare Pages
+2026-04-29T17:08:58.364722Z	
+2026-04-29T17:08:58.429825Z	
+2026-04-29T17:08:58.430479Z	Using v2 root directory strategy
+2026-04-29T17:08:58.447914Z	Success: Finished cloning repository files
+2026-04-29T17:09:00.393616Z	Checking for configuration in a Wrangler configuration file (BETA)
+2026-04-29T17:09:00.394164Z	
+2026-04-29T17:09:01.526087Z	No Wrangler configuration file found. Continuing.
+2026-04-29T17:09:01.801232Z	Detected the following tools from environment: nodejs@24.13.1, pnpm@10.11.1
+2026-04-29T17:09:01.803331Z	Installing nodejs 24.13.1
+2026-04-29T17:09:02.649357Z	Trying to update node-build... ok
+2026-04-29T17:09:02.71954Z	To follow progress, use 'tail -f /tmp/node-build.20260429170902.798.log' or pass --verbose
+2026-04-29T17:09:02.767661Z	Downloading node-v24.13.1-linux-x64.tar.gz...
+2026-04-29T17:09:02.911959Z	-> https://nodejs.org/dist/v24.13.1/node-v24.13.1-linux-x64.tar.gz
+2026-04-29T17:09:05.881267Z	Installing node-v24.13.1-linux-x64...
+2026-04-29T17:09:06.518812Z	Installed node-v24.13.1-linux-x64 to /opt/buildhome/.asdf/installs/nodejs/24.13.1
+2026-04-29T17:09:06.519259Z	
+2026-04-29T17:09:08.142025Z	
+2026-04-29T17:09:08.142332Z	changed 1 package in 716ms
+2026-04-29T17:09:08.822428Z	Reshimming asdf nodejs...
+2026-04-29T17:09:11.562932Z	Preparing pnpm@10.11.1 for immediate activation...
+2026-04-29T17:09:12.518146Z	Installing project dependencies: pnpm install
+2026-04-29T17:09:13.085249Z	(node:3280) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-04-29T17:09:13.085572Z	(Use `node --trace-deprecation ...` to show where the warning was created)
+2026-04-29T17:09:13.086528Z	Scope: all 9 workspace projects
+2026-04-29T17:09:13.149885Z	Lockfile is up to date, resolution step is skipped
+2026-04-29T17:09:13.190269Z	Progress: resolved 1, reused 0, downloaded 0, added 0
+2026-04-29T17:09:13.263642Z	Packages: +488
+2026-04-29T17:09:13.263953Z	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+2026-04-29T17:09:14.196762Z	Progress: resolved 488, reused 0, downloaded 36, added 0
+2026-04-29T17:09:15.195198Z	Progress: resolved 488, reused 0, downloaded 81, added 10
+2026-04-29T17:09:16.198033Z	Progress: resolved 488, reused 0, downloaded 119, added 20
+2026-04-29T17:09:17.199738Z	Progress: resolved 488, reused 0, downloaded 173, added 44
+2026-04-29T17:09:18.203123Z	Progress: resolved 488, reused 0, downloaded 284, added 102
+2026-04-29T17:09:19.204762Z	Progress: resolved 488, reused 0, downloaded 302, added 110
+2026-04-29T17:09:20.207037Z	Progress: resolved 488, reused 0, downloaded 383, added 148
+2026-04-29T17:09:21.192622Z	Progress: resolved 488, reused 0, downloaded 488, added 488, done
+2026-04-29T17:09:21.545865Z	.../esbuild@0.27.3/node_modules/esbuild postinstall$ node install.js
+2026-04-29T17:09:21.66295Z	.../esbuild@0.27.3/node_modules/esbuild postinstall: Done
+2026-04-29T17:09:22.022003Z	
+2026-04-29T17:09:22.022436Z	devDependencies:
+2026-04-29T17:09:22.022602Z	+ prettier 3.8.1
+2026-04-29T17:09:22.022814Z	+ typescript 5.9.3
+2026-04-29T17:09:22.022973Z	
+2026-04-29T17:09:22.099353Z	. preinstall$ sh -c 'rm -f package-lock.json yarn.lock; case "$npm_config_user_agent" in pnpm/*) ;; *) echo "Use pnpm instead" >&2; exit 1 ;; esac'
+2026-04-29T17:09:22.119637Z	. preinstall: Done
+2026-04-29T17:09:22.30562Z	Done in 9.5s using pnpm v10.11.1
+2026-04-29T17:09:22.390383Z	Executing user command: npm run build
+2026-04-29T17:09:22.690125Z	npm warn Unknown project config "auto-install-peers". This will stop working in the next major version of npm.
+2026-04-29T17:09:22.690373Z	npm warn Unknown project config "strict-peer-dependencies". This will stop working in the next major version of npm.
+2026-04-29T17:09:22.720325Z	
+2026-04-29T17:09:22.720635Z	> workspace@0.0.0 build
+2026-04-29T17:09:22.720747Z	> pnpm run typecheck && pnpm -r --if-present run build
+2026-04-29T17:09:22.720828Z	
+2026-04-29T17:09:23.122047Z	
+2026-04-29T17:09:23.122579Z	> workspace@0.0.0 typecheck /opt/buildhome/repo
+2026-04-29T17:09:23.123061Z	> pnpm run typecheck:libs && pnpm -r --filter "./artifacts/**" --filter "./scripts" --if-present run typecheck
+2026-04-29T17:09:23.123219Z	
+2026-04-29T17:09:23.652479Z	
+2026-04-29T17:09:23.652861Z	> workspace@0.0.0 typecheck:libs /opt/buildhome/repo
+2026-04-29T17:09:23.652963Z	> tsc --build
+2026-04-29T17:09:23.653026Z	
+2026-04-29T17:09:26.787336Z	(node:3618) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-04-29T17:09:26.787638Z	(Use `node --trace-deprecation ...` to show where the warning was created)
+2026-04-29T17:09:26.78901Z	Scope: 4 of 9 workspace projects
+2026-04-29T17:09:26.794041Z	artifacts/api-server typecheck$ tsc -p tsconfig.json --noEmit
+2026-04-29T17:09:26.795525Z	artifacts/mockup-sandbox typecheck$ tsc -p tsconfig.json --noEmit
+2026-04-29T17:09:26.796082Z	artifacts/word-search typecheck$ tsc -p tsconfig.json --noEmit
+2026-04-29T17:09:26.796818Z	scripts typecheck$ tsc -p tsconfig.json --noEmit
+2026-04-29T17:09:28.509588Z	scripts typecheck: Done
+2026-04-29T17:09:28.966937Z	artifacts/api-server typecheck: Done
+2026-04-29T17:09:34.008853Z	artifacts/mockup-sandbox typecheck: Done
+2026-04-29T17:09:34.433906Z	artifacts/word-search typecheck: Done
+2026-04-29T17:09:34.915627Z	(node:3682) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-04-29T17:09:34.915935Z	(Use `node --trace-deprecation ...` to show where the warning was created)
+2026-04-29T17:09:34.916601Z	Scope: 8 of 9 workspace projects
+2026-04-29T17:09:34.919473Z	artifacts/mockup-sandbox build$ vite build
+2026-04-29T17:09:35.685403Z	artifacts/mockup-sandbox build: [31mfailed to load config from /opt/buildhome/repo/artifacts/mockup-sandbox/vite.config.ts[39m
+2026-04-29T17:09:35.68811Z	artifacts/mockup-sandbox build: [31merror during build:
+2026-04-29T17:09:35.689025Z	artifacts/mockup-sandbox build: Error: PORT environment variable is required but was not provided.
+2026-04-29T17:09:35.689214Z	artifacts/mockup-sandbox build:     at file:///opt/buildhome/repo/artifacts/mockup-sandbox/node_modules/.vite-temp/vite.config.ts.timestamp-1777482575451-753036d2d76c8.mjs:145:9
+2026-04-29T17:09:35.690466Z	artifacts/mockup-sandbox build:     at ModuleJob.run (node:internal/modules/esm/module_job:430:25)
+2026-04-29T17:09:35.690586Z	artifacts/mockup-sandbox build:     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:661:26)
+2026-04-29T17:09:35.690653Z	artifacts/mockup-sandbox build:     at async loadConfigFromBundledFile (file:///opt/buildhome/repo/node_modules/.pnpm/vite@7.3.2_@types+node@25.3.5_jiti@2.6.1_lightningcss@1.31.1_tsx@4.21.0_yaml@2.8.2/node_modules/vite/dist/node/chunks/config.js:35920:12)
+2026-04-29T17:09:35.690739Z	artifacts/mockup-sandbox build:     at async bundleAndLoadConfigFile (file:///opt/buildhome/repo/node_modules/.pnpm/vite@7.3.2_@types+node@25.3.5_jiti@2.6.1_lightningcss@1.31.1_tsx@4.21.0_yaml@2.8.2/node_modules/vite/dist/node/chunks/config.js:35808:17)
+2026-04-29T17:09:35.691552Z	artifacts/mockup-sandbox build:     at async loadConfigFromFile (file:///opt/buildhome/repo/node_modules/.pnpm/vite@7.3.2_@types+node@25.3.5_jiti@2.6.1_lightningcss@1.31.1_tsx@4.21.0_yaml@2.8.2/node_modules/vite/dist/node/chunks/config.js:35775:42)
+2026-04-29T17:09:35.692031Z	artifacts/mockup-sandbox build:     at async resolveConfig (file:///opt/buildhome/repo/node_modules/.pnpm/vite@7.3.2_@types+node@25.3.5_jiti@2.6.1_lightningcss@1.31.1_tsx@4.21.0_yaml@2.8.2/node_modules/vite/dist/node/chunks/config.js:35424:22)
+2026-04-29T17:09:35.692162Z	artifacts/mockup-sandbox build:     at async createBuilder (file:///opt/buildhome/repo/node_modules/.pnpm/vite@7.3.2_@types+node@25.3.5_jiti@2.6.1_lightningcss@1.31.1_tsx@4.21.0_yaml@2.8.2/node_modules/vite/dist/node/chunks/config.js:33879:19)
+2026-04-29T17:09:35.692897Z	artifacts/mockup-sandbox build:     at async CAC.<anonymous> (file:///opt/buildhome/repo/node_modules/.pnpm/vite@7.3.2_@types+node@25.3.5_jiti@2.6.1_lightningcss@1.31.1_tsx@4.21.0_yaml@2.8.2/node_modules/vite/dist/node/cli.js:629:10)[39m
+2026-04-29T17:09:35.718029Z	artifacts/mockup-sandbox build: Failed
+2026-04-29T17:09:35.73603Z	/opt/buildhome/repo/artifacts/mockup-sandbox:
+2026-04-29T17:09:35.736258Z	 ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  @workspace/mockup-sandbox@2.0.0 build: `vite build`
+2026-04-29T17:09:35.736345Z	Exit status 1
+2026-04-29T17:09:36.223741Z	Failed: Error while executing user command. Exited with error code: 1
+2026-04-29T17:09:36.234333Z	Failed: build command exited with code: 1
+2026-04-29T17:09:36.949399Z	Failed: error occurred while running build command
