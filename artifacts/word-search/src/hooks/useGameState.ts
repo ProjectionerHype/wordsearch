@@ -6,7 +6,6 @@ import {
   getDailyChallenge,
   getStoredDailyResult,
   saveDailyResult,
-  recordStreakForCompletion,
   DailyResult,
 } from "../lib/daily";
 import confetti from "canvas-confetti";
@@ -98,7 +97,6 @@ export function useGameState() {
               dayNumber: s.daily.dayNumber,
             };
             saveDailyResult(result);
-            recordStreakForCompletion(s.daily.dayNumber);
             dailyResult = result;
             newBest = s.timeElapsed;
           }
