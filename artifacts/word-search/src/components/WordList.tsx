@@ -8,9 +8,9 @@ interface WordListProps {
 
 export function WordList({ board, foundWords }: WordListProps) {
   return (
-    <div className="bg-card rounded-2xl shadow-xl p-4 md:p-6 border border-card-border">
-      <h3 className="text-lg font-bold mb-4 text-foreground/80 uppercase tracking-wider">Words to Find</h3>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-2 gap-3">
+    <div className="bg-card rounded-2xl shadow-xl p-4 md:p-5 border border-card-border md:h-full md:flex md:flex-col md:min-h-0">
+      <h3 className="text-base md:text-lg font-bold mb-3 md:mb-4 text-foreground/80 uppercase tracking-wider shrink-0">Words to Find</h3>
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-2 gap-x-3 gap-y-2 md:overflow-y-auto md:flex-1 md:min-h-0 pr-1">
         {board.wordsToFind.map((word) => {
           const isFound = foundWords.includes(word);
           const placedWord = board.placedWords.find(pw => pw.word === word);

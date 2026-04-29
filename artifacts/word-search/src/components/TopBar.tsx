@@ -18,7 +18,7 @@ export function TopBar({ timeElapsed, hintsRemaining, isPaused, onPauseToggle, o
   };
 
   return (
-    <div className="flex items-center justify-between bg-card p-4 rounded-2xl shadow-sm border border-card-border mb-6">
+    <div className="flex items-center justify-between bg-card p-3 md:p-4 rounded-2xl shadow-sm border border-card-border mb-4 shrink-0">
       <div className="flex items-center gap-2 sm:gap-4">
         <button 
           onClick={onBackToMenu}

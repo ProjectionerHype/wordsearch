@@ -143,7 +143,7 @@ export function GameGrid({ board, foundWords, onWordFound, isPaused, hintedCells
 
   return (
     <div 
-      className="relative w-full max-w-[500px] aspect-square mx-auto bg-card rounded-2xl shadow-xl overflow-hidden border border-card-border p-2 select-none touch-none"
+      className="relative aspect-square w-full max-w-[500px] md:w-auto md:h-full md:max-h-full md:max-w-full mx-auto bg-card rounded-2xl shadow-xl overflow-hidden border border-card-border p-2 select-none touch-none"
       style={{ touchAction: 'none' }}
     >
       <div 

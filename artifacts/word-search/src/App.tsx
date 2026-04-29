@@ -16,12 +16,12 @@ function GameApp() {
   const { state, startGame, handleWordFound, useHint, togglePause, returnToMenu } = useGameState();
 
   return (
-    <div className="min-h-[100dvh] w-full bg-background flex flex-col pt-8 md:pt-12 px-4 pb-8 overflow-x-hidden relative">
+    <div className="min-h-[100dvh] md:h-[100dvh] w-full bg-background flex flex-col pt-4 md:pt-6 px-4 pb-4 md:pb-6 overflow-x-hidden md:overflow-hidden relative">
       {/* Background decorations */}
       <div className="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-primary/5 blur-[100px] pointer-events-none" />
       <div className="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-secondary/5 blur-[100px] pointer-events-none" />
 
-      <main className="flex-1 w-full max-w-5xl mx-auto flex flex-col relative z-10">
+      <main className="flex-1 w-full max-w-5xl mx-auto flex flex-col relative z-10 min-h-0">
         <AnimatePresence mode="wait">
           {state.status === "start" && (
             <motion.div key="start" className="flex-1 flex items-center justify-center">
@@ -40,7 +40,7 @@ function GameApp() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="flex-1 flex flex-col"
+              className="flex-1 flex flex-col min-h-0"
             >
               <TopBar 
                 timeElapsed={state.timeElapsed}
@@ -52,8 +52,8 @@ function GameApp() {
                 onBackToMenu={returnToMenu}
               />
 
-              <div className="flex flex-col md:flex-row gap-6 md:gap-8 flex-1 min-h-0">
-                <div className="flex-1 flex items-center justify-center order-1 md:order-1">
+              <div className="flex flex-col md:flex-row gap-4 md:gap-6 flex-1 min-h-0">
+                <div className="flex-1 flex items-center justify-center order-1 md:order-1 min-h-0 min-w-0">
                   <GameGrid 
                     board={state.board}
                     foundWords={state.foundWords}
@@ -63,7 +63,7 @@ function GameApp() {
                   />
                 </div>
                 
-                <div className="w-full md:w-64 lg:w-80 flex flex-col order-2 md:order-2">
+                <div className="w-full md:w-64 lg:w-72 flex flex-col order-2 md:order-2 md:h-full md:min-h-0">
                   <WordList 
                     board={state.board}
                     foundWords={state.foundWords}
