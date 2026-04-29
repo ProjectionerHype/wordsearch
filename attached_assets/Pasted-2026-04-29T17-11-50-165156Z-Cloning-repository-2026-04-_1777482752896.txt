@@ -1,0 +1,75 @@
+2026-04-29T17:11:50.165156Z	Cloning repository...
+2026-04-29T17:11:50.930433Z	From https://github.com/ProjectionerHype/wordsearch
+2026-04-29T17:11:50.930905Z	 * branch            a2c79effe66a1681f792c3796fa8de768baab681 -> FETCH_HEAD
+2026-04-29T17:11:50.931053Z	
+2026-04-29T17:11:50.971222Z	HEAD is now at a2c79ef Fix website build errors by adjusting environment variable handling
+2026-04-29T17:11:50.971672Z	
+2026-04-29T17:11:51.028113Z	
+2026-04-29T17:11:51.028966Z	Using v2 root directory strategy
+2026-04-29T17:11:51.04431Z	Success: Finished cloning repository files
+2026-04-29T17:11:53.082338Z	Checking for configuration in a Wrangler configuration file (BETA)
+2026-04-29T17:11:53.083071Z	
+2026-04-29T17:11:54.269005Z	No Wrangler configuration file found. Continuing.
+2026-04-29T17:11:54.580489Z	Detected the following tools from environment: nodejs@24.13.1, pnpm@10.11.1
+2026-04-29T17:11:54.580946Z	Installing nodejs 24.13.1
+2026-04-29T17:11:55.29678Z	Trying to update node-build... ok
+2026-04-29T17:11:55.373397Z	To follow progress, use 'tail -f /tmp/node-build.20260429171155.799.log' or pass --verbose
+2026-04-29T17:11:55.423234Z	Downloading node-v24.13.1-linux-x64.tar.gz...
+2026-04-29T17:11:55.586626Z	-> https://nodejs.org/dist/v24.13.1/node-v24.13.1-linux-x64.tar.gz
+2026-04-29T17:11:58.649582Z	Installing node-v24.13.1-linux-x64...
+2026-04-29T17:11:59.308908Z	Installed node-v24.13.1-linux-x64 to /opt/buildhome/.asdf/installs/nodejs/24.13.1
+2026-04-29T17:11:59.309299Z	
+2026-04-29T17:12:01.057061Z	
+2026-04-29T17:12:01.057523Z	changed 1 package in 727ms
+2026-04-29T17:12:01.70706Z	Reshimming asdf nodejs...
+2026-04-29T17:12:04.323156Z	Preparing pnpm@10.11.1 for immediate activation...
+2026-04-29T17:12:05.520366Z	Installing project dependencies: pnpm install
+2026-04-29T17:12:06.225415Z	(node:3281) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-04-29T17:12:06.225672Z	(Use `node --trace-deprecation ...` to show where the warning was created)
+2026-04-29T17:12:06.226831Z	Scope: all 9 workspace projects
+2026-04-29T17:12:06.310005Z	Lockfile is up to date, resolution step is skipped
+2026-04-29T17:12:06.34673Z	Progress: resolved 1, reused 0, downloaded 0, added 0
+2026-04-29T17:12:06.433475Z	Packages: +488
+2026-04-29T17:12:06.433714Z	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+2026-04-29T17:12:07.348355Z	Progress: resolved 488, reused 0, downloaded 41, added 0
+2026-04-29T17:12:08.347749Z	Progress: resolved 488, reused 0, downloaded 106, added 18
+2026-04-29T17:12:09.348162Z	Progress: resolved 488, reused 0, downloaded 161, added 38
+2026-04-29T17:12:10.349518Z	Progress: resolved 488, reused 0, downloaded 292, added 98
+2026-04-29T17:12:11.350605Z	Progress: resolved 488, reused 0, downloaded 316, added 106
+2026-04-29T17:12:12.35522Z	Progress: resolved 488, reused 0, downloaded 462, added 207
+2026-04-29T17:12:13.066544Z	Progress: resolved 488, reused 0, downloaded 488, added 488, done
+2026-04-29T17:12:13.325405Z	.../esbuild@0.27.3/node_modules/esbuild postinstall$ node install.js
+2026-04-29T17:12:13.426665Z	.../esbuild@0.27.3/node_modules/esbuild postinstall: Done
+2026-04-29T17:12:13.779197Z	
+2026-04-29T17:12:13.779764Z	devDependencies:
+2026-04-29T17:12:13.779961Z	+ prettier 3.8.1
+2026-04-29T17:12:13.780082Z	+ typescript 5.9.3
+2026-04-29T17:12:13.780711Z	
+2026-04-29T17:12:13.84148Z	. preinstall$ sh -c 'rm -f package-lock.json yarn.lock; case "$npm_config_user_agent" in pnpm/*) ;; *) echo "Use pnpm instead" >&2; exit 1 ;; esac'
+2026-04-29T17:12:13.862294Z	. preinstall: Done
+2026-04-29T17:12:14.049884Z	Done in 8.3s using pnpm v10.11.1
+2026-04-29T17:12:14.143409Z	Executing user command: pnpm --filter @workspace/word-search run build
+2026-04-29T17:12:14.759298Z	(node:3415) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-04-29T17:12:14.759691Z	(Use `node --trace-deprecation ...` to show where the warning was created)
+2026-04-29T17:12:14.762787Z	
+2026-04-29T17:12:14.76295Z	> @workspace/word-search@0.0.0 build /opt/buildhome/repo/artifacts/word-search
+2026-04-29T17:12:14.763024Z	> vite build --config vite.config.ts
+2026-04-29T17:12:14.763144Z	
+2026-04-29T17:12:15.171876Z	[36mvite v7.3.2 [32mbuilding client environment for production...[36m[39m
+2026-04-29T17:12:15.285813Z	transforming...
+2026-04-29T17:12:15.83765Z	[33msrc/components/ui/tooltip.tsx (2:0): Error when using sourcemap for reporting an error: Can't resolve original location of error.[39m
+2026-04-29T17:12:19.537327Z	[32m✓[39m 2214 modules transformed.
+2026-04-29T17:12:19.976762Z	rendering chunks...
+2026-04-29T17:12:19.989305Z	computing gzip size...
+2026-04-29T17:12:20.008671Z	[2mdist/public/[22m[32mindex.html                 [39m[1m[2m  3.84 kB[22m[1m[22m[2m │ gzip:   1.24 kB[22m
+2026-04-29T17:12:20.008955Z	[2mdist/public/[22m[2massets/[22m[35mindex-ElE-tIG_.css  [39m[1m[2m100.91 kB[22m[1m[22m[2m │ gzip:  16.37 kB[22m
+2026-04-29T17:12:20.009126Z	[2mdist/public/[22m[2massets/[22m[36mindex-DiUzoBg9.js   [39m[1m[2m490.60 kB[22m[1m[22m[2m │ gzip: 160.84 kB[22m
+2026-04-29T17:12:20.00919Z	[32m✓ built in 4.80s[39m
+2026-04-29T17:12:20.146459Z	Finished
+2026-04-29T17:12:21.081341Z	Checking for configuration in a Wrangler configuration file (BETA)
+2026-04-29T17:12:21.082114Z	
+2026-04-29T17:12:22.23331Z	No Wrangler configuration file found. Continuing.
+2026-04-29T17:12:22.234422Z	Note: No functions dir at /functions found. Skipping.
+2026-04-29T17:12:22.234626Z	Validating asset output directory
+2026-04-29T17:12:22.23514Z	Error: Output directory "dist" not found.
+2026-04-29T17:12:22.924927Z	Failed: build output directory not found
