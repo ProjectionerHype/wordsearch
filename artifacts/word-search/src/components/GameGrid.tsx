@@ -163,13 +163,17 @@ export function GameGrid({ board, foundWords, onWordFound, isPaused, hintedCells
           const geom = computePillGeometry(start, end, board.size);
 
           return (
-            <motion.div
+            <div
               key={`highlight-${pw.word}`}
-              initial={{ scale: 0, opacity: 0 }}
-              animate={{ scale: 1, opacity: 0.4 }}
-              className={`absolute rounded-full highlight-${pw.colorIndex} pointer-events-none`}
+              className="pointer-events-none"
               style={geom}
-            />
+            >
+              <motion.div
+                initial={{ scale: 0, opacity: 0 }}
+                animate={{ scale: 1, opacity: 0.4 }}
+                className={`w-full h-full rounded-full highlight-${pw.colorIndex}`}
+              />
+            </div>
           );
         })}
 
