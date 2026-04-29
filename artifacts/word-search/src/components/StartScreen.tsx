@@ -6,50 +6,15 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { DailyChallenge, DailyResult, formatTime } from "../lib/daily";
 
 function Logo() {
-  const tiles = [
-    { letter: "W", className: "bg-primary text-primary-foreground rotate-[-5deg]" },
-    { letter: "O", className: "bg-secondary text-secondary-foreground rotate-[4deg]" },
-    { letter: "R", className: "bg-accent text-accent-foreground rotate-[-3deg]" },
-    { letter: "D", className: "bg-foreground text-background rotate-[6deg]" },
-  ];
   return (
-    <div className="flex items-center gap-1 md:gap-1.5 select-none">
-      {/* "daily" with highlighter swipe */}
-      <span className="relative inline-flex items-center px-1.5">
+    <div className="font-black text-2xl md:text-[28px] text-foreground tracking-tight lowercase leading-none select-none">
+      daily<span className="relative inline-block">
         <span
           aria-hidden
-          className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[70%] bg-primary/25 rounded-md -rotate-2"
+          className="absolute left-[-3px] right-[-3px] top-1/2 h-[11px] md:h-[13px] -translate-y-1/2 bg-accent/60 -rotate-2 rounded-[3px]"
         />
-        <span className="relative font-black text-xl md:text-2xl text-foreground tracking-tight lowercase italic">
-          daily
-        </span>
-      </span>
-
-      {/* "WORD" as colored Scrabble tiles */}
-      <div className="flex items-center -space-x-1">
-        {tiles.map((t) => (
-          <div
-            key={t.letter}
-            className={`w-7 h-7 md:w-8 md:h-8 rounded-md shadow-md flex items-center justify-center font-mono font-black text-sm md:text-base ${t.className}`}
-          >
-            {t.letter}
-          </div>
-        ))}
-      </div>
-
-      {/* "search" with highlighter swipe + ".fun" badge */}
-      <span className="relative inline-flex items-center px-1.5">
-        <span
-          aria-hidden
-          className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[70%] bg-secondary/25 rounded-md rotate-2"
-        />
-        <span className="relative font-black text-xl md:text-2xl text-foreground tracking-tight lowercase italic">
-          search
-        </span>
-      </span>
-      <span className="font-mono font-black text-xs md:text-sm text-primary-foreground bg-primary px-1.5 py-0.5 rounded-md shadow-sm rotate-[3deg]">
-        .fun
-      </span>
+        <span className="relative">word</span>
+      </span>search<span className="text-primary">.fun</span>
     </div>
   );
 }
