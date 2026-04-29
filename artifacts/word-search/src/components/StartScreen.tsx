@@ -13,15 +13,23 @@ function Logo() {
     { letter: "D", className: "bg-foreground text-background rotate-[5deg]" },
   ];
   return (
-    <div className="flex items-center -space-x-1.5">
-      {tiles.map((t) => (
-        <div
-          key={t.letter}
-          className={`w-9 h-9 md:w-10 md:h-10 rounded-lg shadow-md flex items-center justify-center font-mono font-black text-lg md:text-xl ${t.className}`}
-        >
-          {t.letter}
-        </div>
-      ))}
+    <div className="flex items-center gap-1.5 md:gap-2 select-none">
+      <span className="font-black text-lg md:text-2xl text-foreground tracking-tight lowercase">
+        daily
+      </span>
+      <div className="flex items-center -space-x-1">
+        {tiles.map((t) => (
+          <div
+            key={t.letter}
+            className={`w-7 h-7 md:w-8 md:h-8 rounded-md shadow-sm flex items-center justify-center font-mono font-black text-sm md:text-base ${t.className}`}
+          >
+            {t.letter}
+          </div>
+        ))}
+      </div>
+      <span className="font-black text-lg md:text-2xl text-foreground tracking-tight lowercase">
+        search<span className="text-primary">.fun</span>
+      </span>
     </div>
   );
 }
@@ -57,21 +65,10 @@ export function StartScreen({
       exit={{ opacity: 0, y: -20 }}
       className="w-full max-w-md mx-auto p-5 md:p-6 bg-card rounded-3xl shadow-2xl border border-card-border my-auto"
     >
-      <div className="flex justify-between items-start mb-4">
-        <div className="flex items-center gap-3 min-w-0">
+      <div className="flex justify-between items-center mb-5">
+        <h1 aria-label="dailywordsearch.fun">
           <Logo />
-          <div className="min-w-0">
-            <h1 className="text-lg md:text-xl font-black text-foreground tracking-tight leading-none">
-              <span className="text-primary">Daily</span> Word Search
-            </h1>
-            <div className="mt-1.5 inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-primary/10 border border-primary/20">
-              <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-              <span className="font-mono text-[11px] md:text-xs font-bold text-foreground/80 tracking-tight">
-                dailywordsearch<span className="text-primary">.fun</span>
-              </span>
-            </div>
-          </div>
-        </div>
+        </h1>
         <Dialog>
           <DialogTrigger asChild>
             <button
