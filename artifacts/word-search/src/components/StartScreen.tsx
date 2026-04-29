@@ -7,28 +7,48 @@ import { DailyChallenge, DailyResult, formatTime } from "../lib/daily";
 
 function Logo() {
   const tiles = [
-    { letter: "W", className: "bg-primary text-primary-foreground rotate-[-4deg]" },
-    { letter: "O", className: "bg-secondary text-secondary-foreground rotate-[3deg]" },
-    { letter: "R", className: "bg-accent text-accent-foreground rotate-[-2deg]" },
-    { letter: "D", className: "bg-foreground text-background rotate-[5deg]" },
+    { letter: "W", className: "bg-primary text-primary-foreground rotate-[-5deg]" },
+    { letter: "O", className: "bg-secondary text-secondary-foreground rotate-[4deg]" },
+    { letter: "R", className: "bg-accent text-accent-foreground rotate-[-3deg]" },
+    { letter: "D", className: "bg-foreground text-background rotate-[6deg]" },
   ];
   return (
-    <div className="flex items-center gap-1.5 md:gap-2 select-none">
-      <span className="font-black text-lg md:text-2xl text-foreground tracking-tight lowercase">
-        daily
+    <div className="flex items-center gap-1 md:gap-1.5 select-none">
+      {/* "daily" with highlighter swipe */}
+      <span className="relative inline-flex items-center px-1.5">
+        <span
+          aria-hidden
+          className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[70%] bg-primary/25 rounded-md -rotate-2"
+        />
+        <span className="relative font-black text-xl md:text-2xl text-foreground tracking-tight lowercase italic">
+          daily
+        </span>
       </span>
+
+      {/* "WORD" as colored Scrabble tiles */}
       <div className="flex items-center -space-x-1">
         {tiles.map((t) => (
           <div
             key={t.letter}
-            className={`w-7 h-7 md:w-8 md:h-8 rounded-md shadow-sm flex items-center justify-center font-mono font-black text-sm md:text-base ${t.className}`}
+            className={`w-7 h-7 md:w-8 md:h-8 rounded-md shadow-md flex items-center justify-center font-mono font-black text-sm md:text-base ${t.className}`}
           >
             {t.letter}
           </div>
         ))}
       </div>
-      <span className="font-black text-lg md:text-2xl text-foreground tracking-tight lowercase">
-        search<span className="text-primary">.fun</span>
+
+      {/* "search" with highlighter swipe + ".fun" badge */}
+      <span className="relative inline-flex items-center px-1.5">
+        <span
+          aria-hidden
+          className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[70%] bg-secondary/25 rounded-md rotate-2"
+        />
+        <span className="relative font-black text-xl md:text-2xl text-foreground tracking-tight lowercase italic">
+          search
+        </span>
+      </span>
+      <span className="font-mono font-black text-xs md:text-sm text-primary-foreground bg-primary px-1.5 py-0.5 rounded-md shadow-sm rotate-[3deg]">
+        .fun
       </span>
     </div>
   );
