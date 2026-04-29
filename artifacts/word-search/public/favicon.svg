@@ -1,23 +1,30 @@
 <svg width="180" height="180" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="letterFill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#A78BFA"/>
+    </linearGradient>
+  </defs>
+
   <rect width="180" height="180" rx="40" fill="#000000"/>
 
   <g font-family="'Outfit', 'Inter', system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif"
-     font-weight="800"
-     font-size="34"
+     font-weight="900"
+     font-size="36"
      text-anchor="middle"
-     fill="#ffffff"
-     opacity="0.45">
-    <text x="45"  y="63">A</text>
-    <text x="90"  y="63">K</text>
-    <text x="135" y="63">P</text>
+     fill="url(#letterFill)"
+     opacity="0.95">
+    <text x="45"  y="64">A</text>
+    <text x="90"  y="64">K</text>
+    <text x="135" y="64">P</text>
 
-    <text x="45"  y="103">M</text>
-    <text x="90"  y="103">T</text>
-    <text x="135" y="103">E</text>
+    <text x="45"  y="104">M</text>
+    <text x="90"  y="104">T</text>
+    <text x="135" y="104">E</text>
 
-    <text x="45"  y="143">L</text>
-    <text x="90"  y="143">R</text>
-    <text x="135" y="143">Z</text>
+    <text x="45"  y="144">L</text>
+    <text x="90"  y="144">R</text>
+    <text x="135" y="144">Z</text>
   </g>
 
   <path d="M 45 50 L 135 140"
@@ -28,11 +35,11 @@
 
   <g font-family="'Outfit', 'Inter', system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif"
      font-weight="900"
-     font-size="34"
+     font-size="36"
      text-anchor="middle"
      fill="#000000">
-    <text x="45"  y="63">W</text>
-    <text x="90"  y="103">I</text>
-    <text x="135" y="143">N</text>
+    <text x="45"  y="64">W</text>
+    <text x="90"  y="104">I</text>
+    <text x="135" y="144">N</text>
   </g>
 </svg>
