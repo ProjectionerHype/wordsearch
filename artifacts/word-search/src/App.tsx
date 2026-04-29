@@ -24,7 +24,7 @@ function GameApp() {
       <main className="flex-1 w-full max-w-5xl mx-auto flex flex-col relative z-10 min-h-0">
         <AnimatePresence mode="wait">
           {state.status === "start" && (
-            <motion.div key="start" className="flex-1 flex items-center justify-center">
+            <motion.div key="start" className="flex-1 flex items-center justify-center overflow-y-auto py-4">
               <StartScreen 
                 onStart={startGame}
                 onStartDaily={startDailyChallenge}
