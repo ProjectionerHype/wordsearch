@@ -20,19 +20,19 @@ export function WordList({ board, foundWords }: WordListProps) {
             <motion.div 
               key={word}
               animate={{ opacity: isFound ? 0.6 : 1 }}
-              className="relative flex items-center"
+              className="flex items-center"
             >
-              <span className={`font-mono text-sm md:text-base font-bold transition-colors duration-300 ${isFound ? 'text-muted-foreground' : 'text-foreground'}`}>
+              <span className={`relative inline-block font-mono text-sm md:text-base font-bold transition-colors duration-300 ${isFound ? 'text-muted-foreground' : 'text-foreground'}`}>
                 {word}
+                {isFound && (
+                  <motion.span
+                    initial={{ width: 0 }}
+                    animate={{ width: "100%" }}
+                    transition={{ duration: 0.3, ease: "easeOut" }}
+                    className={`absolute left-0 top-1/2 -translate-y-1/2 h-[3px] rounded-full opacity-80 pointer-events-none ${colorClass}`}
+                  />
+                )}
               </span>
-              {isFound && (
-                <motion.div 
-                  initial={{ width: 0 }}
-                  animate={{ width: "100%" }}
-                  transition={{ duration: 0.3, ease: "easeOut" }}
-                  className={`absolute left-0 h-[3px] rounded-full opacity-70 ${colorClass}`}
-                />
-              )}
             </motion.div>
           );
         })}

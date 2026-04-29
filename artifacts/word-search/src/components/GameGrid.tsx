@@ -15,6 +15,32 @@ interface Point {
   y: number;
 }
 
+function computePillGeometry(start: Point, end: Point, size: number): React.CSSProperties {
+  const cellPct = 100 / size;
+  const sx = (start.x + 0.5) * cellPct;
+  const sy = (start.y + 0.5) * cellPct;
+  const ex = (end.x + 0.5) * cellPct;
+  const ey = (end.y + 0.5) * cellPct;
+  const midX = (sx + ex) / 2;
+  const midY = (sy + ey) / 2;
+  const dx = ex - sx;
+  const dy = ey - sy;
+  const distance = Math.sqrt(dx * dx + dy * dy);
+  const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+  const thickness = cellPct * 0.78;
+  const length = distance + thickness;
+
+  return {
+    position: "absolute",
+    left: `${midX}%`,
+    top: `${midY}%`,
+    width: `${length}%`,
+    height: `${thickness}%`,
+    transform: `translate(-50%, -50%) rotate(${angle}deg)`,
+    transformOrigin: "center",
+  };
+}
+
 export function GameGrid({ board, foundWords, onWordFound, isPaused, hintedCells }: GameGridProps) {
   const [startCell, setStartCell] = useState<Point | null>(null);
   const [currentCell, setCurrentCell] = useState<Point | null>(null);
@@ -129,29 +155,18 @@ export function GameGrid({ board, foundWords, onWordFound, isPaused, hintedCells
         onPointerMove={handlePointerMove}
       >
         {/* Render Highlights */}
-        {foundHighlights.map((pw, i) => {
+        {foundHighlights.map((pw) => {
           const start = pw.cells[0];
           const end = pw.cells[pw.cells.length - 1];
-          const dx = end.x - start.x;
-          const dy = end.y - start.y;
-          const length = Math.max(Math.abs(dx), Math.abs(dy)) + 1;
-          const angle = Math.atan2(dy, dx) * (180 / Math.PI);
-          
+          const geom = computePillGeometry(start, end, board.size);
+
           return (
             <motion.div
               key={`highlight-${pw.word}`}
               initial={{ scale: 0, opacity: 0 }}
               animate={{ scale: 1, opacity: 0.4 }}
-              className={`absolute rounded-full highlight-${pw.colorIndex} origin-left pointer-events-none`}
-              style={{
-                left: `${(start.x + 0.5) * (100 / board.size)}%`,
-                top: `${(start.y + 0.5) * (100 / board.size)}%`,
-                width: `calc(${length * (100 / board.size)}% )`,
-                height: `${(100 / board.size) * 0.8}%`,
-                marginTop: `-${(100 / board.size) * 0.4}%`,
-                marginLeft: `-${(100 / board.size) * 0.4}%`,
-                transform: `rotate(${angle}deg)`,
-              }}
+              className={`absolute rounded-full highlight-${pw.colorIndex} pointer-events-none`}
+              style={geom}
             />
           );
         })}
@@ -159,16 +174,8 @@ export function GameGrid({ board, foundWords, onWordFound, isPaused, hintedCells
         {/* Render Current Selection */}
         {startCell && currentCell && (
           <div
-            className="absolute rounded-full bg-primary/30 origin-left pointer-events-none"
-            style={{
-              left: `${(startCell.x + 0.5) * (100 / board.size)}%`,
-              top: `${(startCell.y + 0.5) * (100 / board.size)}%`,
-              width: `calc(${(Math.max(Math.abs(currentCell.x - startCell.x), Math.abs(currentCell.y - startCell.y)) + 1) * (100 / board.size)}% )`,
-              height: `${(100 / board.size) * 0.8}%`,
-              marginTop: `-${(100 / board.size) * 0.4}%`,
-              marginLeft: `-${(100 / board.size) * 0.4}%`,
-              transform: `rotate(${Math.atan2(currentCell.y - startCell.y, currentCell.x - startCell.x) * (180 / Math.PI)}deg)`,
-            }}
+            className="absolute rounded-full bg-primary/30 pointer-events-none"
+            style={computePillGeometry(startCell, currentCell, board.size)}
           />
         )}
 
