@@ -1,33 +1,55 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { generateGrid, GameBoard, PlacedWord } from "../lib/wordSearch";
+import { generateGrid, GameBoard } from "../lib/wordSearch";
 import { ThemeName, Difficulty } from "../lib/words";
+import {
+  DailyChallenge,
+  getDailyChallenge,
+  getStoredDailyResult,
+  saveDailyResult,
+  DailyResult,
+} from "../lib/daily";
 import confetti from "canvas-confetti";
+
+export type GameMode = "regular" | "daily";
 
 export interface GameState {
   status: "start" | "playing" | "won";
+  mode: GameMode;
   theme: ThemeName;
   difficulty: Difficulty;
   board: GameBoard | null;
   foundWords: string[];
   timeElapsed: number;
   hintsRemaining: number;
+  hintsUsed: number;
   isPaused: boolean;
   bestTime: number | null;
   hintedCells: { x: number; y: number }[];
+  daily: DailyChallenge;
+  dailyResult: DailyResult | null;
 }
 
+const MAX_HINTS = 3;
+
 export function useGameState() {
-  const [state, setState] = useState<GameState>({
-    status: "start",
-    theme: "Animals",
-    difficulty: "Easy",
-    board: null,
-    foundWords: [],
-    timeElapsed: 0,
-    hintsRemaining: 3,
-    isPaused: false,
-    bestTime: null,
-    hintedCells: [],
+  const [state, setState] = useState<GameState>(() => {
+    const daily = getDailyChallenge();
+    return {
+      status: "start",
+      mode: "regular",
+      theme: "Animals",
+      difficulty: "Easy",
+      board: null,
+      foundWords: [],
+      timeElapsed: 0,
+      hintsRemaining: MAX_HINTS,
+      hintsUsed: 0,
+      isPaused: false,
+      bestTime: null,
+      hintedCells: [],
+      daily,
+      dailyResult: getStoredDailyResult(daily.dateKey),
+    };
   });
 
   const timerRef = useRef<number | null>(null);
@@ -49,51 +71,93 @@ export function useGameState() {
   // Check win condition
   useEffect(() => {
     if (state.status === "playing" && state.board) {
-      if (state.foundWords.length === state.board.wordsToFind.length && state.board.wordsToFind.length > 0) {
+      if (
+        state.foundWords.length === state.board.wordsToFind.length &&
+        state.board.wordsToFind.length > 0
+      ) {
         setState((s) => {
-          const key = `wordsearch-best-${s.theme}-${s.difficulty}`;
-          const currentBest = localStorage.getItem(key);
-          let newBest = s.timeElapsed;
-          if (currentBest) {
-            newBest = Math.min(s.timeElapsed, parseInt(currentBest, 10));
+          let newBest = s.bestTime;
+          let dailyResult = s.dailyResult;
+
+          if (s.mode === "regular") {
+            const key = `wordsearch-best-${s.theme}-${s.difficulty}`;
+            const currentBest = localStorage.getItem(key);
+            newBest = s.timeElapsed;
+            if (currentBest) {
+              newBest = Math.min(s.timeElapsed, parseInt(currentBest, 10));
+            }
+            localStorage.setItem(key, newBest.toString());
+          } else {
+            const result: DailyResult = {
+              dateKey: s.daily.dateKey,
+              timeElapsed: s.timeElapsed,
+              hintsUsed: s.hintsUsed,
+              theme: s.theme,
+              difficulty: s.difficulty,
+              dayNumber: s.daily.dayNumber,
+            };
+            saveDailyResult(result);
+            dailyResult = result;
+            newBest = s.timeElapsed;
           }
-          localStorage.setItem(key, newBest.toString());
 
           confetti({
-            particleCount: 100,
-            spread: 70,
-            origin: { y: 0.6 }
+            particleCount: 120,
+            spread: 80,
+            origin: { y: 0.6 },
           });
 
-          return { ...s, status: "won", bestTime: newBest };
+          return { ...s, status: "won", bestTime: newBest, dailyResult };
         });
       }
     }
-  }, [state.foundWords, state.board, state.status, state.timeElapsed, state.theme, state.difficulty]);
+  }, [state.foundWords, state.board, state.status]);
 
   // Load best time on start screen change
   useEffect(() => {
-    if (state.status === "start") {
+    if (state.status === "start" && state.mode === "regular") {
       const key = `wordsearch-best-${state.theme}-${state.difficulty}`;
       const best = localStorage.getItem(key);
       setState((s) => ({ ...s, bestTime: best ? parseInt(best, 10) : null }));
     }
-  }, [state.status, state.theme, state.difficulty]);
+  }, [state.status, state.theme, state.difficulty, state.mode]);
 
   const startGame = useCallback((theme: ThemeName, difficulty: Difficulty) => {
     const board = generateGrid(theme, difficulty);
     setState((s) => ({
       ...s,
       status: "playing",
+      mode: "regular",
       theme,
       difficulty,
       board,
       foundWords: [],
       timeElapsed: 0,
-      hintsRemaining: 3,
+      hintsRemaining: MAX_HINTS,
+      hintsUsed: 0,
       isPaused: false,
       hintedCells: [],
     }));
+  }, []);
+
+  const startDailyChallenge = useCallback(() => {
+    setState((s) => {
+      const board = generateGrid(s.daily.theme, s.daily.difficulty, s.daily.seed);
+      return {
+        ...s,
+        status: "playing",
+        mode: "daily",
+        theme: s.daily.theme,
+        difficulty: s.daily.difficulty,
+        board,
+        foundWords: [],
+        timeElapsed: 0,
+        hintsRemaining: MAX_HINTS,
+        hintsUsed: 0,
+        isPaused: false,
+        hintedCells: [],
+      };
+    });
   }, []);
 
   const handleWordFound = useCallback((word: string) => {
@@ -108,13 +172,16 @@ export function useGameState() {
   const useHint = useCallback(() => {
     setState((s) => {
       if (s.hintsRemaining > 0 && s.board) {
-        const unfound = s.board.placedWords.filter(pw => !s.foundWords.includes(pw.word));
+        const unfound = s.board.placedWords.filter(
+          (pw) => !s.foundWords.includes(pw.word),
+        );
         if (unfound.length > 0) {
           const target = unfound[Math.floor(Math.random() * unfound.length)];
           return {
             ...s,
             hintsRemaining: s.hintsRemaining - 1,
-            hintedCells: [...s.hintedCells, target.cells[0]]
+            hintsUsed: s.hintsUsed + 1,
+            hintedCells: [...s.hintedCells, target.cells[0]],
           };
         }
       }
@@ -130,13 +197,36 @@ export function useGameState() {
     setState((s) => ({ ...s, status: "start" }));
   }, []);
 
+  const playAgain = useCallback(() => {
+    setState((s) => {
+      if (s.mode === "daily") {
+        // Daily can't be replayed for a new score; just return to menu.
+        return { ...s, status: "start" };
+      }
+      const board = generateGrid(s.theme, s.difficulty);
+      return {
+        ...s,
+        status: "playing",
+        board,
+        foundWords: [],
+        timeElapsed: 0,
+        hintsRemaining: MAX_HINTS,
+        hintsUsed: 0,
+        isPaused: false,
+        hintedCells: [],
+      };
+    });
+  }, []);
+
   return {
     state,
     setState,
     startGame,
+    startDailyChallenge,
     handleWordFound,
     useHint,
     togglePause,
     returnToMenu,
+    playAgain,
   };
 }

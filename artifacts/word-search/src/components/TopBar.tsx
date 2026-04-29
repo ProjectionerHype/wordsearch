@@ -1,16 +1,18 @@
-import { Pause, Play, Lightbulb, RotateCcw, ArrowLeft } from "lucide-react";
+import { Pause, Play, Lightbulb, RotateCcw, ArrowLeft, CalendarDays } from "lucide-react";
 
 interface TopBarProps {
   timeElapsed: number;
   hintsRemaining: number;
   isPaused: boolean;
+  isDaily: boolean;
+  dailyDayNumber?: number;
   onPauseToggle: () => void;
   onHint: () => void;
   onNewGame: () => void;
   onBackToMenu: () => void;
 }
 
-export function TopBar({ timeElapsed, hintsRemaining, isPaused, onPauseToggle, onHint, onNewGame, onBackToMenu }: TopBarProps) {
+export function TopBar({ timeElapsed, hintsRemaining, isPaused, isDaily, dailyDayNumber, onPauseToggle, onHint, onNewGame, onBackToMenu }: TopBarProps) {
   const formatTime = (seconds: number) => {
     const m = Math.floor(seconds / 60);
     const s = seconds % 60;
@@ -19,7 +21,7 @@ export function TopBar({ timeElapsed, hintsRemaining, isPaused, onPauseToggle, o
 
   return (
     <div className="flex items-center justify-between bg-card p-3 md:p-4 rounded-2xl shadow-sm border border-card-border mb-4 shrink-0">
-      <div className="flex items-center gap-2 sm:gap-4">
+      <div className="flex items-center gap-2 sm:gap-3">
         <button 
           onClick={onBackToMenu}
           className="p-2 rounded-xl text-muted-foreground hover:bg-muted transition-colors"
@@ -27,9 +29,15 @@ export function TopBar({ timeElapsed, hintsRemaining, isPaused, onPauseToggle, o
         >
           <ArrowLeft className="w-5 h-5" />
         </button>
-        <div className="font-mono font-black text-xl text-foreground w-16">
+        <div className="font-mono font-black text-xl text-foreground">
           {formatTime(timeElapsed)}
         </div>
+        {isDaily && (
+          <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-primary/15 text-primary text-xs font-black uppercase tracking-wider">
+            <CalendarDays className="w-3.5 h-3.5" />
+            Daily #{dailyDayNumber}
+          </div>
+        )}
       </div>
 
       <div className="flex items-center gap-2">

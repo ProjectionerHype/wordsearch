@@ -21,13 +21,31 @@ export interface GameBoard {
 
 const LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-export function generateGrid(theme: ThemeName, difficulty: Difficulty): GameBoard {
+function mulberry32(seed: number): () => number {
+  let s = seed >>> 0;
+  return () => {
+    s |= 0;
+    s = (s + 0x6D2B79F5) | 0;
+    let t = s;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+export function generateGrid(theme: ThemeName, difficulty: Difficulty, seed?: number): GameBoard {
   const settings = DIFFICULTY_SETTINGS[difficulty];
   const size = settings.size;
   const wordList = THEMES[theme];
-  
-  // Pick random words from the theme
-  const shuffledWords = [...wordList].sort(() => Math.random() - 0.5).slice(0, settings.wordsCount);
+  const rand = seed !== undefined ? mulberry32(seed) : Math.random;
+
+  // Pick random words from the theme (Fisher-Yates with seeded RNG)
+  const pool = [...wordList];
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = Math.floor(rand() * (i + 1));
+    [pool[i], pool[j]] = [pool[j], pool[i]];
+  }
+  const shuffledWords = pool.slice(0, settings.wordsCount);
   
   // Initialize empty grid
   const grid: Cell[][] = Array(size).fill(null).map((_, y) => 
@@ -43,9 +61,9 @@ export function generateGrid(theme: ThemeName, difficulty: Difficulty): GameBoar
     
     while (!placed && attempts < 100) {
       attempts++;
-      const dir = settings.directions[Math.floor(Math.random() * settings.directions.length)];
-      const startX = Math.floor(Math.random() * size);
-      const startY = Math.floor(Math.random() * size);
+      const dir = settings.directions[Math.floor(rand() * settings.directions.length)];
+      const startX = Math.floor(rand() * size);
+      const startY = Math.floor(rand() * size);
       
       const endX = startX + dir[0] * (word.length - 1);
       const endY = startY + dir[1] * (word.length - 1);
@@ -81,7 +99,7 @@ export function generateGrid(theme: ThemeName, difficulty: Difficulty): GameBoar
   for (let y = 0; y < size; y++) {
     for (let x = 0; x < size; x++) {
       if (grid[y][x].letter === "") {
-        grid[y][x].letter = LETTERS[Math.floor(Math.random() * LETTERS.length)];
+        grid[y][x].letter = LETTERS[Math.floor(rand() * LETTERS.length)];
       }
     }
   }

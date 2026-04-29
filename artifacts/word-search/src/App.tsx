@@ -13,7 +13,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 const queryClient = new QueryClient();
 
 function GameApp() {
-  const { state, startGame, handleWordFound, useHint, togglePause, returnToMenu } = useGameState();
+  const { state, startGame, startDailyChallenge, handleWordFound, useHint, togglePause, returnToMenu, playAgain } = useGameState();
 
   return (
     <div className="min-h-[100dvh] md:h-[100dvh] w-full bg-background flex flex-col pt-4 md:pt-6 px-4 pb-4 md:pb-6 overflow-x-hidden md:overflow-hidden relative">
@@ -26,10 +26,13 @@ function GameApp() {
           {state.status === "start" && (
             <motion.div key="start" className="flex-1 flex items-center justify-center">
               <StartScreen 
-                onStart={startGame} 
+                onStart={startGame}
+                onStartDaily={startDailyChallenge}
                 bestTime={state.bestTime} 
                 currentTheme={state.theme}
                 currentDifficulty={state.difficulty}
+                daily={state.daily}
+                dailyResult={state.dailyResult}
               />
             </motion.div>
           )}
@@ -46,9 +49,11 @@ function GameApp() {
                 timeElapsed={state.timeElapsed}
                 hintsRemaining={state.hintsRemaining}
                 isPaused={state.isPaused}
+                isDaily={state.mode === "daily"}
+                dailyDayNumber={state.daily.dayNumber}
                 onPauseToggle={togglePause}
                 onHint={useHint}
-                onNewGame={() => startGame(state.theme, state.difficulty)}
+                onNewGame={state.mode === "daily" ? returnToMenu : () => startGame(state.theme, state.difficulty)}
                 onBackToMenu={returnToMenu}
               />
 
@@ -88,7 +93,9 @@ function GameApp() {
                 theme={state.theme}
                 difficulty={state.difficulty}
                 wordsFound={state.foundWords.length}
-                onPlayAgain={() => startGame(state.theme, state.difficulty)}
+                mode={state.mode}
+                dailyResult={state.dailyResult}
+                onPlayAgain={playAgain}
                 onChangeTheme={returnToMenu}
               />
             </motion.div>

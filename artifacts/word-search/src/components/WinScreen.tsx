@@ -1,6 +1,8 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { ThemeName, Difficulty } from "../lib/words";
-import { Trophy, Clock, Target, ArrowRight, RotateCcw } from "lucide-react";
+import { Trophy, Clock, Target, ArrowRight, RotateCcw, Share2, Check, CalendarDays } from "lucide-react";
+import { DailyResult, buildShareText, formatTime } from "../lib/daily";
 
 interface WinScreenProps {
   timeElapsed: number;
@@ -8,18 +10,46 @@ interface WinScreenProps {
   theme: ThemeName;
   difficulty: Difficulty;
   wordsFound: number;
+  mode: "regular" | "daily";
+  dailyResult: DailyResult | null;
   onPlayAgain: () => void;
   onChangeTheme: () => void;
 }
 
-export function WinScreen({ timeElapsed, bestTime, theme, difficulty, wordsFound, onPlayAgain, onChangeTheme }: WinScreenProps) {
-  const formatTime = (seconds: number) => {
-    const m = Math.floor(seconds / 60);
-    const s = seconds % 60;
-    return `${m}:${s.toString().padStart(2, "0")}`;
-  };
+export function WinScreen({
+  timeElapsed,
+  bestTime,
+  theme,
+  difficulty,
+  wordsFound,
+  mode,
+  dailyResult,
+  onPlayAgain,
+  onChangeTheme,
+}: WinScreenProps) {
+  const [copied, setCopied] = useState(false);
+  const isDaily = mode === "daily" && dailyResult;
+  const isNewBest = mode === "regular" && bestTime === timeElapsed;
 
-  const isNewBest = bestTime === timeElapsed;
+  const handleShare = async () => {
+    if (!dailyResult) return;
+    const text = buildShareText(dailyResult);
+    try {
+      if (navigator.share) {
+        await navigator.share({ text });
+        return;
+      }
+    } catch {
+      // user cancelled or unsupported, fall through to clipboard
+    }
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // ignore
+    }
+  };
 
   return (
     <motion.div 
@@ -32,21 +62,32 @@ export function WinScreen({ timeElapsed, bestTime, theme, difficulty, wordsFound
           NEW BEST!
         </div>
       )}
+      {isDaily && (
+        <div className="absolute top-4 right-[-30px] bg-primary text-primary-foreground font-black py-1 px-10 rotate-45 shadow-sm text-xs">
+          DAILY #{dailyResult!.dayNumber}
+        </div>
+      )}
 
       <motion.div 
         initial={{ y: -20 }}
         animate={{ y: 0 }}
         className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6"
       >
-        <Trophy className="w-10 h-10 text-primary" />
+        {isDaily ? (
+          <CalendarDays className="w-10 h-10 text-primary" />
+        ) : (
+          <Trophy className="w-10 h-10 text-primary" />
+        )}
       </motion.div>
 
-      <h2 className="text-3xl font-black mb-2 text-foreground">You Won!</h2>
+      <h2 className="text-3xl font-black mb-2 text-foreground">
+        {isDaily ? "Daily Solved!" : "You Won!"}
+      </h2>
       <p className="text-muted-foreground font-medium mb-8">
         You found all {wordsFound} words in {theme} ({difficulty}).
       </p>
 
-      <div className="grid grid-cols-2 gap-4 mb-8">
+      <div className="grid grid-cols-2 gap-4 mb-6">
         <div className="bg-muted rounded-2xl p-4 flex flex-col items-center">
           <Clock className="w-6 h-6 text-muted-foreground mb-2" />
           <span className="text-2xl font-mono font-black text-foreground">{formatTime(timeElapsed)}</span>
@@ -54,18 +95,40 @@ export function WinScreen({ timeElapsed, bestTime, theme, difficulty, wordsFound
         </div>
         <div className="bg-muted rounded-2xl p-4 flex flex-col items-center">
           <Target className="w-6 h-6 text-muted-foreground mb-2" />
-          <span className="text-2xl font-mono font-black text-foreground">{bestTime ? formatTime(bestTime) : "--:--"}</span>
-          <span className="text-xs font-bold text-muted-foreground uppercase">Best</span>
+          <span className="text-2xl font-mono font-black text-foreground">
+            {isDaily ? dailyResult!.hintsUsed : (bestTime ? formatTime(bestTime) : "--:--")}
+          </span>
+          <span className="text-xs font-bold text-muted-foreground uppercase">
+            {isDaily ? "Hints used" : "Best"}
+          </span>
         </div>
       </div>
 
       <div className="space-y-3">
-        <button
-          onClick={onPlayAgain}
-          className="w-full py-4 rounded-2xl bg-primary text-primary-foreground font-black text-lg shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all active:translate-y-0 flex items-center justify-center gap-2"
-        >
-          <RotateCcw className="w-5 h-5" /> Play Again
-        </button>
+        {isDaily && (
+          <button
+            onClick={handleShare}
+            className="w-full py-4 rounded-2xl bg-primary text-primary-foreground font-black text-lg shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all active:translate-y-0 flex items-center justify-center gap-2"
+          >
+            {copied ? (
+              <>
+                <Check className="w-5 h-5" /> Copied to clipboard
+              </>
+            ) : (
+              <>
+                <Share2 className="w-5 h-5" /> Share Result
+              </>
+            )}
+          </button>
+        )}
+        {!isDaily && (
+          <button
+            onClick={onPlayAgain}
+            className="w-full py-4 rounded-2xl bg-primary text-primary-foreground font-black text-lg shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all active:translate-y-0 flex items-center justify-center gap-2"
+          >
+            <RotateCcw className="w-5 h-5" /> Play Again
+          </button>
+        )}
         <button
           onClick={onChangeTheme}
           className="w-full py-4 rounded-2xl bg-secondary/10 text-secondary font-black text-lg hover:bg-secondary/20 transition-all flex items-center justify-center gap-2"
