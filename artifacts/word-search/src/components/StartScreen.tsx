@@ -57,16 +57,19 @@ export function StartScreen({
       exit={{ opacity: 0, y: -20 }}
       className="w-full max-w-md mx-auto p-5 md:p-6 bg-card rounded-3xl shadow-2xl border border-card-border my-auto"
     >
-      <div className="flex justify-between items-center mb-4">
-        <div className="flex items-center gap-3">
+      <div className="flex justify-between items-start mb-4">
+        <div className="flex items-center gap-3 min-w-0">
           <Logo />
-          <div>
-            <h1 className="text-xl md:text-2xl font-black text-foreground tracking-tight leading-none">
+          <div className="min-w-0">
+            <h1 className="text-lg md:text-xl font-black text-foreground tracking-tight leading-none">
               <span className="text-primary">Daily</span> Word Search
             </h1>
-            <p className="text-[10px] md:text-[11px] text-muted-foreground font-black uppercase tracking-[0.2em] mt-1">
-              A New Puzzle Every Day
-            </p>
+            <div className="mt-1.5 inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-primary/10 border border-primary/20">
+              <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+              <span className="font-mono text-[11px] md:text-xs font-bold text-foreground/80 tracking-tight">
+                dailywordsearch<span className="text-primary">.fun</span>
+              </span>
+            </div>
           </div>
         </div>
         <Dialog>
