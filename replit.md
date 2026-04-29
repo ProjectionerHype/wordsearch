@@ -25,3 +25,25 @@ pnpm workspace monorepo using TypeScript. Each package manages its own dependenc
 - `pnpm --filter @workspace/api-server run dev` — run API server locally
 
 See the `pnpm-workspace` skill for workspace structure, TypeScript setup, and package details.
+
+## Cloudflare Pages Deployment (Word Search)
+
+The `word-search` artifact is a fully client-side React + Vite SPA — it has no
+backend dependency and can be hosted as a static site on Cloudflare Pages.
+
+**Cloudflare Pages settings (Custom domain: `dailywordsearch.fun`):**
+
+- Framework preset: `None` (or "Vite")
+- Build command: `corepack enable && pnpm install --frozen-lockfile && pnpm --filter @workspace/word-search run build`
+- Build output directory: `artifacts/word-search/dist/public`
+- Root directory: leave empty (use repo root)
+- Environment variables:
+  - `NODE_VERSION` = `24`
+  - `PNPM_VERSION` = `10`
+  - (optional) `BASE_PATH` = `/` — defaults to `/` if unset
+
+**SPA routing & headers** are handled by `artifacts/word-search/public/_redirects`
+and `_headers`, which Vite copies into the build output automatically.
+
+**Custom domain:** point `dailywordsearch.fun` (and `www`) to the Pages project
+via Cloudflare DNS. SSL is automatic.
