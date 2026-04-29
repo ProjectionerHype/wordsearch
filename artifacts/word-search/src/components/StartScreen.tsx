@@ -1,9 +1,47 @@
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 import { ThemeName, THEME_NAMES, Difficulty, DIFFICULTY_SETTINGS } from "../lib/words";
-import { Trophy, HelpCircle, CalendarDays, CheckCircle2, Sparkles, ArrowRight } from "lucide-react";
+import { Trophy, HelpCircle, CalendarDays, CheckCircle2, Sparkles, ArrowRight, Flame, Clock } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
-import { DailyChallenge, DailyResult, formatTime } from "../lib/daily";
+import {
+  DailyChallenge,
+  DailyResult,
+  formatTime,
+  getEffectiveStreak,
+  getMillisUntilNextPuzzle,
+  formatCountdown,
+} from "../lib/daily";
+
+const THEME_EMOJI: Record<ThemeName, string> = {
+  Animals: "🐾",
+  Fruits: "🍎",
+  Countries: "🌍",
+  Sports: "⚽",
+  Space: "🚀",
+  Music: "🎵",
+  Tech: "💻",
+  Nature: "🌿",
+};
+
+function getGreeting(): { text: string; emoji: string } {
+  const h = new Date().getHours();
+  if (h < 5) return { text: "Up late?", emoji: "🌙" };
+  if (h < 12) return { text: "Good morning", emoji: "☀️" };
+  if (h < 17) return { text: "Good afternoon", emoji: "🌤" };
+  if (h < 21) return { text: "Good evening", emoji: "🌆" };
+  return { text: "Good night", emoji: "🌙" };
+}
+
+function formatDateLabel(dateKey: string): string {
+  const [y, m, d] = dateKey.split("-").map(Number);
+  const date = new Date(Date.UTC(y, m - 1, d));
+  return date.toLocaleDateString(undefined, {
+    weekday: "long",
+    month: "short",
+    day: "numeric",
+    timeZone: "UTC",
+  });
+}
 
 function Logo() {
   return (
@@ -42,6 +80,16 @@ export function StartScreen({
   const [selectedDifficulty, setSelectedDifficulty] = useState<Difficulty>(currentDifficulty);
 
   const completedToday = dailyResult !== null;
+  const greeting = useMemo(() => getGreeting(), []);
+  const todayLabel = useMemo(() => formatDateLabel(daily.dateKey), [daily.dateKey]);
+  const streak = useMemo(() => getEffectiveStreak(daily), [daily, dailyResult]);
+
+  const [countdownMs, setCountdownMs] = useState<number>(() => getMillisUntilNextPuzzle());
+  useEffect(() => {
+    if (!completedToday) return;
+    const id = window.setInterval(() => setCountdownMs(getMillisUntilNextPuzzle()), 1000);
+    return () => window.clearInterval(id);
+  }, [completedToday]);
 
   return (
     <motion.div 
@@ -50,6 +98,18 @@ export function StartScreen({
       exit={{ opacity: 0, y: -20 }}
       className="w-full max-w-md mx-auto p-5 md:p-6 bg-card rounded-3xl shadow-2xl border border-card-border my-auto"
     >
+      <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center gap-1.5 text-[11px] font-bold text-muted-foreground">
+          <span aria-hidden>{greeting.emoji}</span>
+          <span>{greeting.text}</span>
+        </div>
+        {streak > 0 && (
+          <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-accent/20 text-[11px] font-black text-foreground">
+            <Flame className="w-3.5 h-3.5 text-orange-500" fill="currentColor" />
+            <span>{streak}-day streak</span>
+          </div>
+        )}
+      </div>
       <div className="flex justify-between items-center mb-5">
         <h1 aria-label="dailywordsearch.fun">
           <Logo />
@@ -98,15 +158,19 @@ export function StartScreen({
             )}
           </div>
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <span className="text-xs font-black uppercase tracking-wider text-foreground">Daily Challenge</span>
               <span className="text-[10px] font-mono font-bold text-muted-foreground">#{daily.dayNumber}</span>
+              <span className="text-[10px] font-bold text-muted-foreground/80">· {todayLabel}</span>
             </div>
             <div className="text-xs text-muted-foreground font-medium mt-0.5 truncate">
               {completedToday ? (
-                <>Solved in <span className="font-mono font-bold text-foreground">{formatTime(dailyResult!.timeElapsed)}</span> · Back tomorrow</>
+                <span className="inline-flex items-center gap-1">
+                  <Clock className="w-3 h-3" />
+                  Next puzzle in <span className="font-mono font-bold text-foreground">{formatCountdown(countdownMs)}</span>
+                </span>
               ) : (
-                <>{daily.theme} · {daily.difficulty} · Same puzzle worldwide</>
+                <>{THEME_EMOJI[daily.theme]} {daily.theme} · {daily.difficulty} · Same puzzle worldwide</>
               )}
             </div>
           </div>
@@ -133,13 +197,14 @@ export function StartScreen({
               <button
                 key={theme}
                 onClick={() => setSelectedTheme(theme)}
-                className={`py-2 px-1.5 rounded-lg font-bold text-xs transition-all ${
-                  selectedTheme === theme 
-                    ? "bg-primary text-primary-foreground shadow-md" 
-                    : "bg-muted text-muted-foreground hover:bg-muted/70"
+                className={`py-2 px-1.5 rounded-lg font-bold text-xs transition-all flex flex-col items-center gap-0.5 ${
+                  selectedTheme === theme
+                    ? "bg-primary text-primary-foreground shadow-md scale-[1.02]"
+                    : "bg-muted text-muted-foreground hover:bg-muted/70 hover:-translate-y-0.5"
                 }`}
               >
-                {theme}
+                <span className="text-base leading-none" aria-hidden>{THEME_EMOJI[theme]}</span>
+                <span className="leading-tight">{theme}</span>
               </button>
             ))}
           </div>
