@@ -6,6 +6,8 @@ import {
   getDailyChallenge,
   getStoredDailyResult,
   saveDailyResult,
+  getStreakInfo,
+  StreakInfo,
   DailyResult,
 } from "../lib/daily";
 import confetti from "canvas-confetti";
@@ -27,6 +29,7 @@ export interface GameState {
   hintedCells: { x: number; y: number }[];
   daily: DailyChallenge;
   dailyResult: DailyResult | null;
+  streak: StreakInfo;
 }
 
 const MAX_HINTS = 3;
@@ -49,6 +52,7 @@ export function useGameState() {
       hintedCells: [],
       daily,
       dailyResult: getStoredDailyResult(daily.dateKey),
+      streak: getStreakInfo(),
     };
   });
 
@@ -101,13 +105,15 @@ export function useGameState() {
             newBest = s.timeElapsed;
           }
 
+          const updatedStreak = s.mode === "daily" ? getStreakInfo() : s.streak;
+
           confetti({
             particleCount: 120,
             spread: 80,
             origin: { y: 0.6 },
           });
 
-          return { ...s, status: "won", bestTime: newBest, dailyResult };
+          return { ...s, status: "won", bestTime: newBest, dailyResult, streak: updatedStreak };
         });
       }
     }

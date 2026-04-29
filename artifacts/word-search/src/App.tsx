@@ -33,6 +33,7 @@ function GameApp() {
                 currentDifficulty={state.difficulty}
                 daily={state.daily}
                 dailyResult={state.dailyResult}
+                streak={state.streak}
               />
             </motion.div>
           )}

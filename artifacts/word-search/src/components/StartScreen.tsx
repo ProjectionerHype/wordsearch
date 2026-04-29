@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { ThemeName, THEME_NAMES, Difficulty, DIFFICULTY_SETTINGS } from "../lib/words";
-import { Trophy, HelpCircle, CalendarDays, CheckCircle2, Sparkles, ArrowRight } from "lucide-react";
+import { Trophy, HelpCircle, CalendarDays, CheckCircle2, Sparkles, ArrowRight, Flame } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
-import { DailyChallenge, DailyResult, formatTime } from "../lib/daily";
+import { DailyChallenge, DailyResult, StreakInfo, formatTime } from "../lib/daily";
 
 function Logo() {
   return (
@@ -27,6 +27,7 @@ interface StartScreenProps {
   currentDifficulty: Difficulty;
   daily: DailyChallenge;
   dailyResult: DailyResult | null;
+  streak: StreakInfo;
 }
 
 export function StartScreen({
@@ -37,6 +38,7 @@ export function StartScreen({
   currentDifficulty,
   daily,
   dailyResult,
+  streak,
 }: StartScreenProps) {
   const [selectedTheme, setSelectedTheme] = useState<ThemeName>(currentTheme);
   const [selectedDifficulty, setSelectedDifficulty] = useState<Difficulty>(currentDifficulty);
@@ -100,9 +102,27 @@ export function StartScreen({
             )}
           </div>
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <span className="text-xs font-black uppercase tracking-wider text-foreground">Daily Challenge</span>
               <span className="text-[10px] font-mono font-bold text-muted-foreground">#{daily.dayNumber}</span>
+              {streak.current > 0 && (
+                <span
+                  className={`inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full text-[10px] font-black ${
+                    streak.includesToday
+                      ? "bg-orange-500/15 text-orange-600"
+                      : "bg-muted text-muted-foreground"
+                  }`}
+                  title={
+                    streak.includesToday
+                      ? `${streak.current}-day streak`
+                      : `${streak.current}-day streak — solve today to keep it alive`
+                  }
+                  aria-label={`Current streak: ${streak.current} days`}
+                >
+                  <Flame className="w-3 h-3" />
+                  {streak.current}
+                </span>
+              )}
             </div>
             <div className="text-xs text-muted-foreground font-medium mt-0.5 truncate">
               {completedToday ? (

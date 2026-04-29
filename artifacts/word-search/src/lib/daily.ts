@@ -44,6 +44,8 @@ export interface DailyResult {
 }
 
 const STORAGE_KEY = "wordsearch-daily-result";
+const HISTORY_KEY = "wordsearch-daily-history";
+const LONGEST_KEY = "wordsearch-daily-longest-streak";
 
 export function getStoredDailyResult(dateKey: string): DailyResult | null {
   try {
@@ -57,12 +59,94 @@ export function getStoredDailyResult(dateKey: string): DailyResult | null {
   }
 }
 
-export function saveDailyResult(result: DailyResult): void {
+function getCompletedHistory(): string[] {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(result));
+    const raw = localStorage.getItem(HISTORY_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    if (Array.isArray(parsed)) return parsed.filter((d): d is string => typeof d === "string");
+    return [];
+  } catch {
+    return [];
+  }
+}
+
+function saveCompletedHistory(history: string[]): void {
+  try {
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
   } catch {
     // ignore
   }
+}
+
+export function saveDailyResult(result: DailyResult): void {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(result));
+    const history = getCompletedHistory();
+    if (!history.includes(result.dateKey)) {
+      history.push(result.dateKey);
+      saveCompletedHistory(history);
+    }
+    const streak = getCurrentStreak();
+    const longestRaw = localStorage.getItem(LONGEST_KEY);
+    const longest = longestRaw ? parseInt(longestRaw, 10) || 0 : 0;
+    if (streak > longest) {
+      localStorage.setItem(LONGEST_KEY, streak.toString());
+    }
+  } catch {
+    // ignore
+  }
+}
+
+function utcMidnightToKey(utcMs: number): string {
+  const d = new Date(utcMs);
+  const y = d.getUTCFullYear();
+  const m = (d.getUTCMonth() + 1).toString().padStart(2, "0");
+  const day = d.getUTCDate().toString().padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+
+export interface StreakInfo {
+  current: number;
+  longest: number;
+  includesToday: boolean;
+}
+
+export function getStreakInfo(now: Date = new Date()): StreakInfo {
+  const history = getCompletedHistory();
+  const set = new Set(history);
+  const todayUTC = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
+  const todayKey = utcMidnightToKey(todayUTC);
+
+  let cursor = todayUTC;
+  let includesToday = false;
+  if (set.has(todayKey)) {
+    includesToday = true;
+  } else {
+    // streak is still alive if yesterday was completed (today is not yet missed)
+    cursor = todayUTC - 86400000;
+    if (!set.has(utcMidnightToKey(cursor))) {
+      const longestRaw = localStorage.getItem(LONGEST_KEY);
+      const longest = longestRaw ? parseInt(longestRaw, 10) || 0 : 0;
+      return { current: 0, longest, includesToday: false };
+    }
+  }
+
+  let current = 0;
+  while (set.has(utcMidnightToKey(cursor))) {
+    current++;
+    cursor -= 86400000;
+  }
+
+  const longestRaw = localStorage.getItem(LONGEST_KEY);
+  const storedLongest = longestRaw ? parseInt(longestRaw, 10) || 0 : 0;
+  const longest = Math.max(storedLongest, current);
+
+  return { current, longest, includesToday };
+}
+
+function getCurrentStreak(now: Date = new Date()): number {
+  return getStreakInfo(now).current;
 }
 
 export function formatTime(seconds: number): string {
