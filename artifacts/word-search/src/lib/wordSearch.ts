@@ -36,7 +36,9 @@ function mulberry32(seed: number): () => number {
 export function generateGrid(theme: ThemeName, difficulty: Difficulty, seed?: number): GameBoard {
   const settings = DIFFICULTY_SETTINGS[difficulty];
   const size = settings.size;
-  const wordList = THEMES[theme];
+  // Filter out words that can't possibly fit on this grid size, otherwise
+  // they'd be in `wordsToFind` but never placed and the player could never win.
+  const wordList = THEMES[theme].filter((w) => w.length <= size);
   const rand = seed !== undefined ? mulberry32(seed) : Math.random;
 
   // Pick random words from the theme (Fisher-Yates with seeded RNG)
@@ -45,7 +47,7 @@ export function generateGrid(theme: ThemeName, difficulty: Difficulty, seed?: nu
     const j = Math.floor(rand() * (i + 1));
     [pool[i], pool[j]] = [pool[j], pool[i]];
   }
-  const shuffledWords = pool.slice(0, settings.wordsCount);
+  const candidateWords = pool.slice(0, settings.wordsCount);
   
   // Initialize empty grid
   const grid: Cell[][] = Array(size).fill(null).map((_, y) => 
@@ -55,7 +57,7 @@ export function generateGrid(theme: ThemeName, difficulty: Difficulty, seed?: nu
   const placedWords: PlacedWord[] = [];
   let colorCounter = 0;
   
-  for (const word of shuffledWords) {
+  for (const word of candidateWords) {
     let placed = false;
     let attempts = 0;
     
@@ -104,5 +106,8 @@ export function generateGrid(theme: ThemeName, difficulty: Difficulty, seed?: nu
     }
   }
   
-  return { grid, placedWords, size, wordsToFind: shuffledWords };
+  // Only require the player to find words we actually managed to place,
+  // so a rare placement failure never makes the puzzle unwinnable.
+  const wordsToFind = placedWords.map((pw) => pw.word);
+  return { grid, placedWords, size, wordsToFind };
 }

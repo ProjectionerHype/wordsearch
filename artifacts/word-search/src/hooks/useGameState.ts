@@ -37,7 +37,7 @@ export function useGameState() {
     return {
       status: "start",
       mode: "regular",
-      theme: "Animals",
+      theme: "Mix",
       difficulty: "Easy",
       board: null,
       foundWords: [],
