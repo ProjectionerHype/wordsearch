@@ -45,9 +45,11 @@ export function StartScreen({
 
   return (
     <motion.div 
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.25 }}
+      style={{ transform: "none" }}
       className="w-full max-w-md mx-auto p-5 md:p-6 bg-card rounded-3xl shadow-2xl border border-card-border my-auto"
     >
       <div className="flex justify-between items-center mb-5">
