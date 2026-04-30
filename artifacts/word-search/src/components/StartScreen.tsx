@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { ThemeName, THEME_NAMES, Difficulty, DIFFICULTY_SETTINGS } from "../lib/words";
-import { Trophy, HelpCircle, CalendarDays, CheckCircle2, Sparkles, ArrowRight, Flame } from "lucide-react";
+import { Trophy, HelpCircle, CalendarDays, CheckCircle2, Sparkles, ArrowRight, Flame, BarChart3 } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
-import { DailyChallenge, DailyResult, StreakInfo, formatTime } from "../lib/daily";
+import { DailyChallenge, DailyResult, StreakInfo, formatTime, getStatsInfo } from "../lib/daily";
 
 function Logo() {
   return (
@@ -58,30 +58,48 @@ export function StartScreen({
         <h1 aria-label="dailywordsearch.fun">
           <Logo />
         </h1>
-        <Dialog>
-          <DialogTrigger asChild>
-            <button
-              className="p-2 rounded-full bg-secondary/10 text-secondary hover:bg-secondary/20 transition-colors shrink-0"
-              aria-label="How to play"
-            >
-              <HelpCircle className="w-5 h-5" />
-            </button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>How to Play</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4 text-sm text-muted-foreground mt-4">
-              <p>1. Find all the hidden words in the grid based on the selected theme.</p>
-              <p>2. Drag across the letters to select a word. Words can be forwards or backwards.</p>
-              <p>3. <strong>Easy:</strong> Horizontal and Vertical only.</p>
-              <p>4. <strong>Medium:</strong> Adds forward Diagonals.</p>
-              <p>5. <strong>Hard:</strong> All 8 directions, including backwards.</p>
-              <p>6. <strong>Daily Challenge:</strong> Same puzzle for everyone, every day.</p>
-              <p>7. Use hints if you get stuck!</p>
-            </div>
-          </DialogContent>
-        </Dialog>
+        <div className="flex items-center gap-1.5 shrink-0">
+          <Dialog>
+            <DialogTrigger asChild>
+              <button
+                className="p-2 rounded-full bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
+                aria-label="View stats"
+              >
+                <BarChart3 className="w-5 h-5" />
+              </button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Your Stats</DialogTitle>
+              </DialogHeader>
+              <StatsView />
+            </DialogContent>
+          </Dialog>
+          <Dialog>
+            <DialogTrigger asChild>
+              <button
+                className="p-2 rounded-full bg-secondary/10 text-secondary hover:bg-secondary/20 transition-colors"
+                aria-label="How to play"
+              >
+                <HelpCircle className="w-5 h-5" />
+              </button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>How to Play</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4 text-sm text-muted-foreground mt-4">
+                <p>1. Find all the hidden words in the grid based on the selected theme.</p>
+                <p>2. Drag across the letters to select a word. Words can be forwards or backwards.</p>
+                <p>3. <strong>Easy:</strong> Horizontal and Vertical only.</p>
+                <p>4. <strong>Medium:</strong> Adds forward Diagonals.</p>
+                <p>5. <strong>Hard:</strong> All 8 directions, including backwards.</p>
+                <p>6. <strong>Daily Challenge:</strong> Same puzzle for everyone, every day.</p>
+                <p>7. Use hints if you get stuck!</p>
+              </div>
+            </DialogContent>
+          </Dialog>
+        </div>
       </div>
 
       <button
@@ -201,5 +219,52 @@ export function StartScreen({
         </button>
       </div>
     </motion.div>
+  );
+}
+
+function StatsView() {
+  const stats = getStatsInfo();
+  const hasData = stats.totalSolved > 0;
+
+  if (!hasData) {
+    return (
+      <div className="mt-4 text-center text-sm text-muted-foreground py-8">
+        <Sparkles className="w-8 h-8 mx-auto mb-3 text-muted-foreground/50" />
+        <p className="font-semibold text-foreground mb-1">No daily puzzles solved yet</p>
+        <p>Solve today's daily challenge to start tracking your stats.</p>
+      </div>
+    );
+  }
+
+  const cells: Array<{ label: string; value: string; sub?: string }> = [
+    { label: "Played", value: stats.totalSolved.toString(), sub: stats.totalSolved === 1 ? "puzzle" : "puzzles" },
+    { label: "Current Streak", value: stats.currentStreak.toString(), sub: stats.currentStreak === 1 ? "day" : "days" },
+    { label: "Longest Streak", value: stats.longestStreak.toString(), sub: stats.longestStreak === 1 ? "day" : "days" },
+    { label: "Average Time", value: stats.averageTime !== null ? formatTime(stats.averageTime) : "—" },
+    { label: "Best Time", value: stats.bestTime !== null ? formatTime(stats.bestTime) : "—" },
+    { label: "Hints Used", value: stats.totalHintsUsed.toString() },
+  ];
+
+  return (
+    <div className="mt-4 grid grid-cols-3 gap-2">
+      {cells.map((c) => (
+        <div
+          key={c.label}
+          className="flex flex-col items-center justify-center bg-muted/60 rounded-xl py-3 px-2 text-center"
+        >
+          <div className="text-2xl font-black font-mono tabular-nums text-foreground leading-none">
+            {c.value}
+          </div>
+          {c.sub && (
+            <div className="text-[10px] font-semibold text-muted-foreground mt-0.5 uppercase tracking-wider">
+              {c.sub}
+            </div>
+          )}
+          <div className="text-[10px] font-bold text-muted-foreground mt-1 uppercase tracking-wider">
+            {c.label}
+          </div>
+        </div>
+      ))}
+    </div>
   );
 }

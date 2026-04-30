@@ -46,6 +46,7 @@ export interface DailyResult {
 const STORAGE_KEY = "wordsearch-daily-result";
 const HISTORY_KEY = "wordsearch-daily-history";
 const LONGEST_KEY = "wordsearch-daily-longest-streak";
+const RESULTS_KEY = "wordsearch-daily-results";
 
 export function getStoredDailyResult(dateKey: string): DailyResult | null {
   try {
@@ -79,6 +80,32 @@ function saveCompletedHistory(history: string[]): void {
   }
 }
 
+function getAllResults(): DailyResult[] {
+  try {
+    const raw = localStorage.getItem(RESULTS_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return [];
+    return parsed.filter(
+      (r): r is DailyResult =>
+        r &&
+        typeof r.dateKey === "string" &&
+        typeof r.timeElapsed === "number" &&
+        typeof r.hintsUsed === "number",
+    );
+  } catch {
+    return [];
+  }
+}
+
+function saveAllResults(results: DailyResult[]): void {
+  try {
+    localStorage.setItem(RESULTS_KEY, JSON.stringify(results));
+  } catch {
+    // ignore
+  }
+}
+
 export function saveDailyResult(result: DailyResult): void {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(result));
@@ -87,6 +114,14 @@ export function saveDailyResult(result: DailyResult): void {
       history.push(result.dateKey);
       saveCompletedHistory(history);
     }
+    const all = getAllResults();
+    const existingIdx = all.findIndex((r) => r.dateKey === result.dateKey);
+    if (existingIdx >= 0) {
+      all[existingIdx] = result;
+    } else {
+      all.push(result);
+    }
+    saveAllResults(all);
     const streak = getCurrentStreak();
     const longestRaw = localStorage.getItem(LONGEST_KEY);
     const longest = longestRaw ? parseInt(longestRaw, 10) || 0 : 0;
@@ -147,6 +182,45 @@ export function getStreakInfo(now: Date = new Date()): StreakInfo {
 
 function getCurrentStreak(now: Date = new Date()): number {
   return getStreakInfo(now).current;
+}
+
+export interface StatsInfo {
+  totalSolved: number;
+  currentStreak: number;
+  longestStreak: number;
+  averageTime: number | null;
+  bestTime: number | null;
+  totalHintsUsed: number;
+}
+
+export function getStatsInfo(now: Date = new Date()): StatsInfo {
+  const results = getAllResults();
+  const streak = getStreakInfo(now);
+  const totalSolved = results.length;
+
+  let averageTime: number | null = null;
+  let bestTime: number | null = null;
+  let totalHintsUsed = 0;
+  if (results.length > 0) {
+    let sum = 0;
+    let best = Infinity;
+    for (const r of results) {
+      sum += r.timeElapsed;
+      totalHintsUsed += r.hintsUsed;
+      if (r.timeElapsed < best) best = r.timeElapsed;
+    }
+    averageTime = Math.round(sum / results.length);
+    bestTime = best;
+  }
+
+  return {
+    totalSolved,
+    currentStreak: streak.current,
+    longestStreak: streak.longest,
+    averageTime,
+    bestTime,
+    totalHintsUsed,
+  };
 }
 
 export function formatTime(seconds: number): string {
