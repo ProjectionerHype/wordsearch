@@ -53,9 +53,9 @@ export function StartScreen({
       exit={{ opacity: 0 }}
       transition={{ duration: 0.25 }}
       style={{ transform: "none" }}
-      className="w-full max-w-md mx-auto p-5 md:p-6 bg-card rounded-3xl shadow-2xl border border-card-border my-auto"
+      className="w-full max-w-md mx-auto p-5 md:p-5 bg-card rounded-3xl shadow-2xl border border-card-border my-auto"
     >
-      <div className="flex justify-between items-center mb-5">
+      <div className="flex justify-between items-center mb-5 md:mb-3">
         <h1 aria-label="dailywordsearch.fun">
           <Logo />
         </h1>
@@ -106,7 +106,7 @@ export function StartScreen({
       <button
         onClick={onStartDaily}
         disabled={completedToday}
-        className={`group w-full mb-4 p-3 rounded-2xl text-left transition-all border ${
+        className={`group w-full mb-4 md:mb-3 p-3 rounded-2xl text-left transition-all border ${
           completedToday
             ? "bg-muted border-transparent cursor-default"
             : "bg-gradient-to-br from-primary/15 via-secondary/10 to-accent/15 border-primary/30 hover:border-primary/60 hover:-translate-y-0.5 shadow-sm hover:shadow-md"
@@ -160,21 +160,21 @@ export function StartScreen({
         </div>
       </button>
 
-      <div className="relative flex items-center my-4">
+      <div className="relative flex items-center my-4 md:my-3">
         <div className="flex-1 h-px bg-border" />
         <span className="px-3 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Or Pick Your Own</span>
         <div className="flex-1 h-px bg-border" />
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-4 md:space-y-3">
         <div>
-          <label className="text-[11px] font-black text-foreground/70 uppercase tracking-[0.15em] mb-2 block">Theme</label>
+          <label className="text-[11px] font-black text-foreground/70 uppercase tracking-[0.15em] mb-2 md:mb-1.5 block">Theme</label>
           <div className="grid grid-cols-4 gap-1.5">
             {THEME_NAMES.map(theme => (
               <button
                 key={theme}
                 onClick={() => setSelectedTheme(theme)}
-                className={`py-2 px-1.5 rounded-lg font-bold text-xs transition-all ${
+                className={`py-2 md:py-1.5 px-1.5 rounded-lg font-bold text-xs transition-all ${
                   selectedTheme === theme 
                     ? "bg-primary text-primary-foreground shadow-md" 
                     : "bg-muted text-muted-foreground hover:bg-muted/70"
@@ -187,13 +187,13 @@ export function StartScreen({
         </div>
 
         <div>
-          <label className="text-[11px] font-black text-foreground/70 uppercase tracking-[0.15em] mb-2 block">Difficulty</label>
+          <label className="text-[11px] font-black text-foreground/70 uppercase tracking-[0.15em] mb-2 md:mb-1.5 block">Difficulty</label>
           <div className="grid grid-cols-3 gap-1.5">
             {(Object.keys(DIFFICULTY_SETTINGS) as Difficulty[]).map(diff => (
               <button
                 key={diff}
                 onClick={() => setSelectedDifficulty(diff)}
-                className={`py-2 px-3 rounded-lg font-bold text-xs transition-all ${
+                className={`py-2 md:py-1.5 px-3 rounded-lg font-bold text-xs transition-all ${
                   selectedDifficulty === diff 
                     ? "bg-secondary text-secondary-foreground shadow-md" 
                     : "bg-muted text-muted-foreground hover:bg-muted/70"
@@ -206,7 +206,7 @@ export function StartScreen({
         </div>
 
         {bestTime !== null && (
-          <div className="flex items-center gap-2 text-accent-foreground bg-accent/20 px-3 py-2 rounded-lg text-xs font-bold">
+          <div className="flex items-center gap-2 text-accent-foreground bg-accent/20 px-3 py-2 md:py-1.5 rounded-lg text-xs font-bold">
             <Trophy className="w-4 h-4 text-accent shrink-0" />
             <span className="truncate">Best for {selectedTheme} ({selectedDifficulty}): <span className="font-mono">{formatTime(bestTime)}</span></span>
           </div>
@@ -214,12 +214,12 @@ export function StartScreen({
 
         <button
           onClick={() => onStart(selectedTheme, selectedDifficulty)}
-          className="w-full py-3.5 rounded-2xl bg-foreground text-background font-black text-base tracking-wider uppercase shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all active:translate-y-0"
+          className="w-full py-3.5 md:py-3 rounded-2xl bg-foreground text-background font-black text-base tracking-wider uppercase shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all active:translate-y-0"
         >
           Start Game
         </button>
 
-        <div className="pt-3 mt-1 border-t border-border/60 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
+        <div className="pt-3 md:pt-2 mt-1 md:mt-0 border-t border-border/60 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
           <Link href="/about" className="hover:text-foreground transition-colors">About</Link>
           <span className="text-border">·</span>
           <Link href="/privacy" className="hover:text-foreground transition-colors">Privacy</Link>
