@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { Link } from "wouter";
 import { ThemeName, THEME_NAMES, Difficulty, DIFFICULTY_SETTINGS } from "../lib/words";
 import { Trophy, HelpCircle, CalendarDays, CheckCircle2, Sparkles, ArrowRight, Flame, BarChart3 } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
@@ -217,6 +218,14 @@ export function StartScreen({
         >
           Start Game
         </button>
+
+        <div className="pt-3 mt-1 border-t border-border/60 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
+          <Link href="/about" className="hover:text-foreground transition-colors">About</Link>
+          <span className="text-border">·</span>
+          <Link href="/privacy" className="hover:text-foreground transition-colors">Privacy</Link>
+          <span className="text-border">·</span>
+          <Link href="/terms" className="hover:text-foreground transition-colors">Terms</Link>
+        </div>
       </div>
     </motion.div>
   );
