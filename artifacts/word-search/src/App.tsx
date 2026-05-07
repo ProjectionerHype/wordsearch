@@ -20,9 +20,6 @@ function GameApp() {
 
   return (
     <div className="min-h-[100dvh] md:h-[100dvh] w-full bg-background flex flex-col pt-4 md:pt-3 px-4 pb-4 md:pb-3 overflow-x-hidden md:overflow-hidden relative">
-      {/* Background decorations */}
-      <div className="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-primary/5 blur-[100px] pointer-events-none" />
-      <div className="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-secondary/5 blur-[100px] pointer-events-none" />
 
       <main className="flex-1 w-full max-w-5xl mx-auto flex flex-col relative z-10 min-h-0">
         <AnimatePresence mode="wait">
